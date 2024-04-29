@@ -1,3 +1,4 @@
+import { Student } from './student';
 import { Component } from '@angular/core';
 
 @Component({
@@ -6,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './cadastrar-alunos.component.css'
 })
 export class CadastrarAlunosComponent {
-
+ students: Student[] = [];
 }
