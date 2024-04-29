@@ -1,0 +1,34 @@
+{
+  "students": [
+    {
+      "id": 1,
+      "name": "Diego",
+      "course": "Matemática"
+    },
+    {
+      "id": 2,
+      "name": "Jorge",
+      "course": "Portugues"
+    },
+    {
+      "id": 3,
+      "name": "Carlos",
+      "course": "Computação"
+    },
+    {
+      "id": 4,
+      "name": "",
+      "course": ""
+    },
+    {
+      "id": 5,
+      "name": "",
+      "course": ""
+    },
+    {
+      "id": 6,
+      "name": "",
+      "course": ""
+    }
+  ]
+}
