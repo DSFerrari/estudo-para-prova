@@ -13,6 +13,7 @@ export class CadastrarAlunosComponent implements OnInit {
  students: Student[] = [];
 
  formGroupStudent : FormGroup;
+ isEditing: boolean = false;
 
  constructor(private formBuilder: FormBuilder, private service: AlunoService){
   this.formGroupStudent = formBuilder.group({
@@ -24,15 +25,36 @@ export class CadastrarAlunosComponent implements OnInit {
   ngOnInit(): void {
     this.loadstudents();
   }
-  loadstudents(){
- this.service.getStudents().subscribe({
-  next: data => this.students = data
- });
-}
+  loadstudents() {
+    this.service.getStudents().subscribe({
+      next: (data) => (this.students = data),
+    });
+  }
 
- save(){
-  this.service.save(this.formGroupStudent.value).subscribe({
-    next: data => this.students.push(data)
-  })
- }
+  save() {
+    if (this.isEditing) {
+      this.service.update(this.formGroupStudent.value).subscribe({
+        next: () => {
+          this.loadstudents();
+          this.isEditing = false;
+        },
+      });
+    } else {
+      this.service.save(this.formGroupStudent.value).subscribe({
+        next: (data) => this.students.push(data),
+      });
+    }
+    this.formGroupStudent.reset();
+  }
+
+  delete(student: Student) {
+    this.service.delete(student).subscribe({
+      next: () => this.loadstudents(),
+    });
+  }
+
+  edit(student: Student) {
+    this.formGroupStudent.setValue(student);
+    this.isEditing = true;
+  }
 }
