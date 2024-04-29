@@ -19,4 +19,7 @@ export class CadastrarAlunosComponent {
     course : ['']
 });
  }
+ save(){
+  this.students.push(this.formGroupStudent.value)
+ }
 }
