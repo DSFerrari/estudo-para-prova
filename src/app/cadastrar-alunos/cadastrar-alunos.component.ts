@@ -1,4 +1,4 @@
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Student } from './student';
 import { Component, OnInit } from '@angular/core';
 import { AlunoService } from '../aluno.service';
@@ -15,11 +15,12 @@ export class CadastrarAlunosComponent implements OnInit {
  formGroupStudent : FormGroup;
  isEditing: boolean = false;
 
+
  constructor(private formBuilder: FormBuilder, private service: AlunoService){
   this.formGroupStudent = formBuilder.group({
-    id : [''],
-    name : [''],
-    course : ['']
+    id : ['',],
+    name : ['',[Validators.minLength(3), Validators.required]],
+    course : ['',[Validators.required]]
 });
  }
   ngOnInit(): void {
@@ -32,19 +33,23 @@ export class CadastrarAlunosComponent implements OnInit {
   }
 
   save() {
-    if (this.isEditing) {
-      this.service.update(this.formGroupStudent.value).subscribe({
-        next: () => {
-          this.loadstudents();
-          this.isEditing = false;
-        },
-      });
-    } else {
-      this.service.save(this.formGroupStudent.value).subscribe({
-        next: (data) => this.students.push(data),
-      });
+    if (this.formGroupStudent.valid) {
+      if (this.isEditing) {
+        this.service.update(this.formGroupStudent.value).subscribe({
+          next: () => {
+            this.loadstudents();
+            this.isEditing = false;
+            this.formGroupStudent.reset();
+          },
+        });
+      } else {
+        this.service.save(this.formGroupStudent.value).subscribe({
+          next: (data) => {this.students.push(data),
+            this.formGroupStudent.reset();}
+        });
+      }
+      this.formGroupStudent.reset();
     }
-    this.formGroupStudent.reset();
   }
 
   delete(student: Student) {
@@ -56,5 +61,11 @@ export class CadastrarAlunosComponent implements OnInit {
   edit(student: Student) {
     this.formGroupStudent.setValue(student);
     this.isEditing = true;
+  }
+  get name(): any{
+    return this.formGroupStudent.get("name");
+  }
+  get course(): any{
+    return this.formGroupStudent.get("course");
   }
 }
